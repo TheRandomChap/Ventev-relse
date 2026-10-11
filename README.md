@@ -14,14 +14,15 @@ På en skærm, der skal vise siden løbende, kan du åbne den i browserens fulds
 
 | Fil | Hvad den bruges til |
 | --- | --- |
-| `tvscreen.html` | Venteværelsesskærmens indhold; lægelisten hentes fra Supabase. |
+| `tvscreen.html` | Venteværelsesskærmens indhold; læger, informationsbilleder og indkaldelser hentes fra Supabase. |
 | `logon.html` | Loginformular til administratorer og læger. |
 | `dashboard.html` | Administratorkontrolpanel til læger og konti. |
-| `doctor.html` | Lægens private patientkald og personalealarm. |
+| `app.html` | Lægens private patientkald og personalealarm, indlæst af Windows-appen. |
 | `Style.css` | Samlet udseende for TV-skærm, login og dashboard. |
 | `Script.js` | Dato og klokkeslæt på TV-skærmen samt popup-vinduet til læger i dashboardet. |
 | `auth.js` | Supabase-konfiguration, login, sessionskontrol og log ud. |
 | `doctors.js` | Henter læger til TV-skærmen og lader personalet administrere dem fra dashboardet. |
+| `info-slides.js` | Viser informationsbilleder på TV'et og lader administratoren styre rækkefølge og visningstid. |
 | `calls.js` | Synkroniserer patientkald til TV'et og håndterer lægekald og alarmer i lægeappen. |
 | `electron-main.cjs` | Starter Windows-appen på lægecomputeren. |
 | `package.json` / `package-lock.json` | Electron-afhængigheder og build-kommandoer til Windows-installeren. |
@@ -31,7 +32,7 @@ På en skærm, der skal vise siden løbende, kan du åbne den i browserens fulds
 | `README.md` | Denne vejledning og opsætning. |
 ## Administrer læger fra dashboardet
 
-Når Supabase er sat op, kan en administrator oprette læger med navn, lokation, e-mail og startadgangskode fra `dashboard.html`. Læger logger ind på `doctor.html`, kalder patienter ind til deres rum og kan sende en alarm til alle lægecomputere. TV-siden viser aktive patientkald med patientens navn og lægens rum. Alarmen er kun på lægecomputere.
+Når Supabase er sat op, kan en administrator oprette læger med navn, lokation, e-mail og startadgangskode fra `dashboard.html`. Læger logger ind i Windows-appen, kalder patienter ind til deres rum og kan sende en alarm til alle lægecomputere. TV-siden viser aktive patientkald med patientens navn og lægens rum. Alarmen er kun på lægecomputere. `app.html` er en intern del af Windows-appens filer; `electron-main.cjs` indlæser den ved start.
 
 ### Opret lægetabellen i Supabase
 
@@ -160,6 +161,128 @@ on conflict do nothing;
 
 Slå offentlige brugertilmeldinger fra i Supabase. Lægekonti oprettes fra dashboardet via Edge Function, ikke direkte fra browseren. Patientnavne bliver synlige på venteværelsesskærmen; brug testnavne under udvikling, og få klinikkens godkendelse af den arbejdsgang, før rigtige navne vises.
 
+### Informationsbilleder på TV-skærmen
+
+Kør denne SQL i Supabase SQL Editor efter den øvrige tabelopsætning. Administratorer kan derefter administrere informationsbilleder fra dashboardet ved at uploade en billedfil eller indsætte en offentlig HTTPS-billedadresse. Upload understøtter PNG, JPG, WebP og GIF på op til 10 MB. Vælg 5–300 sekunders visningstid; TV'et skifter automatisk mellem billederne i den valgte rækkefølge.
+
+```sql
+create table if not exists public.info_slides (
+  id bigint generated always as identity primary key,
+  title text not null default '',
+  image_url text not null check (image_url ~ '^https://'),
+  duration_seconds integer not null default 15 check (duration_seconds between 5 and 300),
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table public.info_slides enable row level security;
+revoke all on public.info_slides from anon, authenticated;
+grant select (id, title, image_url, duration_seconds, sort_order)
+  on public.info_slides to anon, authenticated;
+grant insert (title, image_url, duration_seconds, sort_order),
+      update (title, image_url, duration_seconds, sort_order), delete
+  on public.info_slides to authenticated;
+
+drop policy if exists "Anyone can view information slides" on public.info_slides;
+drop policy if exists "Administrators can add information slides" on public.info_slides;
+drop policy if exists "Administrators can update information slides" on public.info_slides;
+drop policy if exists "Administrators can delete information slides" on public.info_slides;
+
+create policy "Anyone can view information slides"
+on public.info_slides for select
+to anon, authenticated
+using (true);
+
+create policy "Administrators can add information slides"
+on public.info_slides for insert
+to authenticated
+with check (exists (
+  select 1 from public.clinic_admins where user_id = auth.uid()
+));
+
+create policy "Administrators can update information slides"
+on public.info_slides for update
+to authenticated
+using (exists (
+  select 1 from public.clinic_admins where user_id = auth.uid()
+))
+with check (exists (
+  select 1 from public.clinic_admins where user_id = auth.uid()
+));
+
+create policy "Administrators can delete information slides"
+on public.info_slides for delete
+to authenticated
+using (exists (
+  select 1 from public.clinic_admins where user_id = auth.uid()
+));
+
+-- Public bucket: TV'et kan vise billeder, mens kun administratorer kan ændre filer
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'info-slides',
+  'info-slides',
+  true,
+  10485760,
+  array['image/png', 'image/jpeg', 'image/webp', 'image/gif']
+)
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Anyone can view information slide files" on storage.objects;
+drop policy if exists "Administrators can upload information slide files" on storage.objects;
+drop policy if exists "Administrators can update information slide files" on storage.objects;
+drop policy if exists "Administrators can delete information slide files" on storage.objects;
+
+create policy "Anyone can view information slide files"
+on storage.objects for select
+to anon, authenticated
+using (bucket_id = 'info-slides');
+
+create policy "Administrators can upload information slide files"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'info-slides'
+  and exists (select 1 from public.clinic_admins where user_id = auth.uid())
+);
+
+create policy "Administrators can update information slide files"
+on storage.objects for update
+to authenticated
+using (
+  bucket_id = 'info-slides'
+  and exists (select 1 from public.clinic_admins where user_id = auth.uid())
+)
+with check (
+  bucket_id = 'info-slides'
+  and exists (select 1 from public.clinic_admins where user_id = auth.uid())
+);
+
+create policy "Administrators can delete information slide files"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'info-slides'
+  and exists (select 1 from public.clinic_admins where user_id = auth.uid())
+);
+
+do $$ begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'info_slides'
+  ) then
+    alter publication supabase_realtime add table public.info_slides;
+  end if;
+end $$;
+```
+
+Billederne skal kunne indlæses af TV-browseren via en offentlig HTTPS-adresse. Del ikke patientoplysninger via informationsbillederne.
+
 ### Udgiv kontooprettelsesfunktionen
 
 Installer Node.js LTS, og kør i projektmappen:
@@ -210,7 +333,7 @@ De vigtigste farver er samlet øverst i `Style.css` under `:root`. Her kan du bl
 }
 ```
 
-TV-layoutet styres øverst i `Style.css` med `.content-grid`, `.doctor-section` og `.welcome`. Login og dashboard bruger samme fil via reglerne med `.auth-`-klasser.
+TV-layoutet styres øverst i `Style.css` med `.content-grid`, `.doctor-section`, `.info-screen` og `.welcome`. Login og dashboard bruger samme fil via reglerne med `.auth-`-klasser.
 
 Hvis du ændrer HTML-klasser, skal du kontrollere, om de samme klasser også bruges i `Style.css`. Klasser forbinder HTML-indholdet med dets udseende.
 
@@ -246,7 +369,7 @@ Projektet er almindelig HTML og JavaScript, ikke Next.js. Derfor bruger det Supa
 3. Projektets URL og publishable key er allerede sat i `auth.js`. Hvis du ændrer projekt eller roterer nøglen, ret de to konstanter øverst i filen.
 4. Slå offentlige tilmeldinger fra under Authentication-indstillingerne, hvis kun klinikkens personale skal have adgang. Login-siden har ikke en tilmeldingsknap.
 5. Opret din egen administratorbruger under **Authentication → Users**, og giv den administratorrollen med SQL-blokken i afsnittet ovenfor. Opret derefter lægekonti fra `dashboard.html`.
-6. Angiv websidens adresse under Supabase Auths **URL Configuration**, inklusive de tilladte adresser til `logon.html`, `dashboard.html` og `doctor.html`.
+6. Angiv websidens adresse under Supabase Auths **URL Configuration**, inklusive de tilladte adresser til `logon.html`, `dashboard.html` og `app.html`.
 7. Åbn siden via en lokal webserver, f.eks. VS Code Live Server, eller via den udgivne HTTPS-adresse. Login virker ikke nødvendigvis, hvis HTML-filen åbnes direkte med `file://`.
 
 Projektets URL og publishable key står øverst i `auth.js`. Brug kun publishable key i browseren. Læg aldrig en `secret`- eller `service_role`-key i browserkode eller GitHub.
