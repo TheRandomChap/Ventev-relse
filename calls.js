@@ -1,16 +1,21 @@
 // Patientkald på TV-skærmen og lægernes private indkaldningsapp.
 const tvCallList = document.querySelector('#patient-call-list');
 if (tvCallList) {
+  const panel = document.querySelector('#patient-call-panel');
   const status = document.querySelector('#patient-call-status');
+  let expiryTimer;
 
   async function refreshPatientCalls() {
     try {
+      const cutoff = new Date(Date.now() - 2 * 60 * 1000).toISOString();
       const { data, error } = await window.authClient
         .from('patient_calls')
         .select('id, patient_name, called_at, doctors(name, location)')
+        .gte('called_at', cutoff)
         .order('called_at', { ascending: false });
       if (error) throw error;
 
+      window.clearTimeout(expiryTimer);
       tvCallList.replaceChildren();
       (data || []).forEach((call) => {
         const card = document.createElement('article');
@@ -22,9 +27,16 @@ if (tvCallList) {
         card.append(name, direction);
         tvCallList.append(card);
       });
-      status.textContent = data?.length ? '' : 'Der er ingen aktive patientkald.';
+      panel.hidden = !data?.length;
+      status.textContent = '';
+
+      if (data?.length) {
+        const oldestExpiry = Math.min(...data.map((call) => Date.parse(call.called_at) + 2 * 60 * 1000));
+        expiryTimer = window.setTimeout(refreshPatientCalls, Math.max(100, oldestExpiry - Date.now() + 100));
+      }
     } catch (error) {
       console.error('Kunne ikke hente patientkald:', error.message);
+      panel.hidden = false;
       status.textContent = 'Patientkald kunne ikke hentes.';
     }
   }
@@ -41,10 +53,10 @@ if (tvCallList) {
   }
 }
 
-// Lægefunktionerne findes kun på doctor.html. TV-skærmen lytter aldrig efter alarmer.
+// Lægefunktionerne findes kun i app.html (Windows-appen). TV-skærmen lytter aldrig efter alarmer.
 const patientCallForm = document.querySelector('#patient-call-form');
 if (patientCallForm) {
-  const loginUrl = 'logon.html?next=doctor.html';
+  const loginUrl = 'logon.html?next=app.html';
   const doctorPageMessage = document.querySelector('#doctor-page-message');
   const myCalls = document.querySelector('#my-patient-calls');
   const callMessage = document.querySelector('#call-message');
@@ -269,7 +281,7 @@ if (patientCallForm) {
   alarmDialog.addEventListener('close', stopAlarmSound);
   document.querySelector('#doctor-logout').addEventListener('click', async () => {
     await window.authClient.auth.signOut();
-    window.location.replace('logon.html?next=doctor.html');
+    window.location.replace('logon.html?next=app.html');
   });
 
   startDoctorApp().catch((error) => {

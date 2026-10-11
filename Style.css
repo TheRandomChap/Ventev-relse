@@ -24,17 +24,15 @@ a { color: inherit; text-decoration: none; }
 .topbar { display: flex; height: 12vh; flex: 0 0 12vh; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .clinic-logo { display: block; width: min(28vw, 320px); max-height: 9vh; object-fit: contain; object-position: left center; }
 .live-indicator { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 2px; }
-.live-indicator span, .count-dot { width: 9px; height: 9px; border-radius: 50%; background: #65a77a; }
+.live-indicator span { width: 9px; height: 9px; border-radius: 50%; background: #65a77a; }
 
 /* Lægerne står i venstre side, mens velkomst og ur står til højre. */
-.content-grid { display: grid; min-height: 0; flex: 1; grid-template-areas: "doctors welcome"; grid-template-columns: 75vw minmax(0, 1fr); gap: 5vw; }
-.doctor-section { display: flex; min-height: 0; flex-direction: column; grid-area: doctors; padding: 4vh 2vw 3vh 0; border-right: 1px solid var(--line); }
+.content-grid { display: grid; min-height: 0; flex: 1; grid-template-areas: "doctors info welcome"; grid-template-columns: 22% minmax(0, 56%) minmax(0, 22%); gap: 0; }
+.doctor-section { display: flex; min-width: 0; min-height: 0; flex-direction: column; grid-area: doctors; padding: 4vh 2vw 3vh 0; border-right: 1px solid var(--line); }
 .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 2vh; }
 .eyebrow { margin: 0 0 10px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 2px; }
 h2 { margin: 0; font-size: clamp(24px, 2vw, 36px); letter-spacing: -1px; }
-.staff-count { display: flex; align-items: center; gap: 8px; margin: 0 0 3px; color: var(--muted); font-size: 13px; white-space: nowrap; }
-.staff-count strong { color: var(--text); }
-.doctor-list { display: grid; min-height: 0; flex: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(90px, 1fr); gap: 1.2vh; overflow: auto; }
+.doctor-list { display: grid; min-height: 0; flex: 1; grid-template-columns: minmax(0, 1fr); grid-auto-flow: row; grid-auto-rows: minmax(70px, auto); align-content: start; gap: 1.2vh; overflow: auto; }
 
 /* Hver lægerække viser navn og lokation. */
 .doctor-row { display: flex; min-height: 0; align-items: center; padding: 1.2vh 1vw; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
@@ -43,13 +41,31 @@ h3 { overflow: hidden; margin: 0; font-size: clamp(17px, 1.4vw, 25px); text-over
 .doctor-room { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
 
 /* Velkomstområdet står midt på den frie del af skærmen. */
-.welcome { display: flex; flex-direction: column; grid-area: welcome; align-self: center; justify-content: center; padding: 4vh 0; }
+.info-screen { position: relative; display: grid; min-width: 0; min-height: 0; grid-area: info; place-items: center; margin: 3vh 1.5vw; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #e9eee8; }
+.info-slide-image { display: block; width: 100%; height: 100%; object-fit: contain; }
+.info-slide-placeholder { display: grid; gap: 10px; padding: 24px; color: var(--muted); text-align: center; }
+.info-slide-placeholder p { margin: 0; }
+.info-slide-caption { position: absolute; right: 0; bottom: 0; left: 0; margin: 0; padding: 18px 24px; background: linear-gradient(transparent, rgba(0, 0, 0, .72)); color: white; font-size: clamp(18px, 2vw, 34px); font-weight: 700; }
+.info-slide-position { position: absolute; right: 12px; top: 12px; padding: 5px 9px; border-radius: 20px; background: rgba(30, 42, 35, .72); color: white; font-size: 12px; }
+.info-slide-image[hidden], .info-slide-placeholder[hidden], .info-slide-caption[hidden] { display: none; }
+.welcome { display: flex; min-width: 0; flex-direction: column; grid-area: welcome; justify-content: center; padding: 2vh 0 2vh 1vw; }
 .welcome-copy { max-width: 700px; }
+.welcome h1 { margin-bottom: 8px; font-size: clamp(24px, 2vw, 34px); letter-spacing: -1px; }
+.welcome .intro { font-size: clamp(12px, .9vw, 16px); line-height: 1.4; }
 h1 { margin: 0 0 18px; font-size: clamp(42px, 5vw, 84px); font-weight: 650; letter-spacing: -4px; line-height: 1.05; }
 .title-dot { color: #6e9c6c; }
 .intro { max-width: 580px; margin: 0; color: var(--muted); font-size: clamp(17px, 1.5vw, 24px); line-height: 1.6; }
-.date-time { display: flex; align-items: center; gap: 24px; margin-top: 4vh; color: var(--muted); font-size: 16px; text-transform: capitalize; }
-.date-time strong { color: var(--text); font-size: clamp(25px, 2.4vw, 40px); font-weight: 600; }
+.info-columns { display: grid; min-height: 0; flex: 1; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-items: stretch; gap: 1.5vh; margin-top: 1.5vh; }
+.clock-panel { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.analog-clock { width: clamp(95px, 8vw, 135px); aspect-ratio: 1; padding: 8px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); box-shadow: 0 12px 34px rgba(41, 54, 47, .09); }
+.analog-clock-face { position: relative; width: 100%; height: 100%; border: 2px solid #dce4da; border-radius: 50%; background: radial-gradient(circle, var(--surface) 0 64%, transparent 65%), repeating-conic-gradient(from -1deg, #718579 0deg 1.2deg, transparent 1.2deg 30deg); }
+.clock-hand { position: absolute; bottom: 50%; left: 50%; z-index: 1; border-radius: 8px; transform-origin: 50% 100%; }
+.hour-hand { width: 5px; height: 25%; background: var(--text); }
+.minute-hand { width: 3px; height: 36%; background: var(--green); }
+.second-hand { width: 2px; height: 40%; background: #b45c4d; }
+.clock-pin { position: absolute; top: 50%; left: 50%; z-index: 2; width: 10px; height: 10px; border: 2px solid var(--surface); border-radius: 50%; background: var(--green); transform: translate(-50%, -50%); }
+.date-time { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--muted); font-size: clamp(13px, 1.1vw, 17px); text-align: center; text-transform: capitalize; }
+.date-time strong { color: var(--text); font-size: clamp(28px, 3vw, 48px); font-weight: 600; font-variant-numeric: tabular-nums; }
 
 /* Hjælp til patienterne og klinikkens kontaktoplysninger nederst. */
 .help-banner { display: flex; min-height: 7vh; align-items: center; gap: 12px; padding: 1vh 1.2vw; border: 1px solid #e1e9df; border-radius: 10px; background: #edf3eb; color: var(--muted); }
@@ -84,6 +100,8 @@ footer { display: flex; min-height: 8vh; align-items: center; justify-content: c
 .doctor-admin-intro { margin: 8px 0 18px; color: var(--muted); font-size: 13px; }
 .doctor-admin label { display: block; margin: 14px 0 6px; font-size: 12px; font-weight: 650; }
 .doctor-admin input:not([type="hidden"]) { width: 100%; height: 42px; padding: 0 11px; border: 1px solid #d9dfd8; border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; }
+.doctor-admin input[type="file"] { height: auto; padding: 9px; }
+.upload-hint { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; }
 .doctor-account-fields { margin: 18px 0 0; padding: 0 12px 12px; border: 1px solid var(--line); border-radius: 8px; }
 .doctor-account-fields legend { padding: 0 6px; color: var(--muted); font-size: 11px; font-weight: 700; }
 .doctor-account-fields small { display: block; margin-top: 8px; color: var(--muted); font-size: 11px; }
@@ -109,7 +127,8 @@ footer { display: flex; min-height: 8vh; align-items: center; justify-content: c
 .doctor-dialog .doctor-form-actions button[type="submit"] { border: 0; background: var(--green); color: #fff; }
 .doctor-dialog .doctor-form-actions button[type="submit"]:hover { background: #245640; }
 .doctor-dialog .doctor-form-actions button.secondary-button { border: 1px solid #d9dfd8; background: var(--surface); color: var(--green); }
-.patient-call-panel { margin-top: 3vh; padding: 1.2vw; border: 2px solid #d69a38; border-radius: 14px; background: #fff8e8; }
+.patient-call-panel { min-width: 0; max-height: 100%; margin-top: 0; padding: 1.2vw; overflow: auto; border: 2px solid #d69a38; border-radius: 14px; background: #fff8e8; }
+.patient-call-panel[hidden] { display: none; }
 .patient-call-panel h2 { color: #70440c; font-size: clamp(19px, 1.6vw, 28px); }
 .patient-call-status { margin: 8px 0; color: #806538; font-size: 12px; }
 .patient-call-list { display: grid; max-height: 28vh; gap: 8px; overflow: auto; }

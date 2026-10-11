@@ -13,6 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
   <script src="doctors.js" defer></script>
+  <script src="info-slides.js" defer></script>
   <script src="calls.js" defer></script>
   <script src="Script.js" defer></script>
 </head>
@@ -27,36 +28,55 @@
     <!-- Hovedområde med velkomst, ur og oversigten over læger. -->
     <div class="content-grid">
       <!-- JavaScript indsætter dato og klokkeslæt i felterne med id date og clock. -->
-      <section class="welcome" aria-labelledby="page-title">
-        <div class="welcome-copy">
-          <p class="eyebrow">VELKOMMEN</p>
-          <h1 id="page-title">Læger på vagt<span class="title-dot">.</span></h1>
-          <p class="intro">Her kan du se, hvilke læger der er til stede, og hvor du skal gå hen.</p>
+      <section class="doctor-section" aria-labelledby="doctors-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="doctors-title">Forsinkelser hos lægen</h2>
+          </div>
         </div>
-        <div class="date-time" aria-label="Aktuel dato og tid">
-          <span id="date">—</span>
-          <strong id="clock">—</strong>
-        </div>
-        <section class="patient-call-panel" aria-labelledby="patient-call-title">
-          <p class="eyebrow">INDKALDELSER</p>
-          <h2 id="patient-call-title">Kaldt ind</h2>
-          <p id="patient-call-status" class="patient-call-status" role="status" aria-live="polite">Henter kald…</p>
-          <div id="patient-call-list" class="patient-call-list" aria-live="polite"></div>
-        </section>
+        <div class="doctor-list" id="doctor-list" aria-live="polite"></div>
+        <p class="doctor-load-message" id="doctor-load-message" role="status" aria-live="polite"></p>
       </section>
 
-      <!-- Lægelisten hentes fra Supabase og bliver tegnet af doctors.js. -->
-      <section class="doctor-section" aria-labelledby="doctors-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">DAGENS BEMANDING</p>
-          <h2 id="doctors-title">Find din læge</h2>
+      <section class="info-screen" aria-label="Information fra klinikken">
+        <img id="info-slide-image" class="info-slide-image" alt="" hidden>
+        <div id="info-slide-placeholder" class="info-slide-placeholder">
+          <p class="eyebrow">INFORMATION</p>
+          <p id="info-slide-message">Henter information…</p>
         </div>
-        <p class="staff-count"><span class="count-dot"></span><strong id="doctor-count">0</strong> læger på klinikken</p>
-      </div>
+        <p id="info-slide-caption" class="info-slide-caption" hidden></p>
+        <div id="info-slide-position" class="info-slide-position" aria-live="polite"></div>
+      </section>
 
-      <div class="doctor-list" id="doctor-list" aria-live="polite"></div>
-      <p class="doctor-load-message" id="doctor-load-message" role="status" aria-live="polite"></p>
+      <section class="welcome" aria-labelledby="page-title">
+          <section class="clock-panel" aria-label="Aktuel dato og tid">
+            <div class="analog-clock" role="img" aria-label="Analogt ur">
+              <div class="analog-clock-face">
+                <span class="clock-hand hour-hand" id="hour-hand"></span>
+                <span class="clock-hand minute-hand" id="minute-hand"></span>
+                <span class="clock-hand second-hand" id="second-hand"></span>
+                <span class="clock-pin"></span>
+              </div>
+            </div>
+            <div class="date-time">
+              <span id="date">—</span>
+              <strong id="clock">—</strong>
+            </div>
+          </section>
+
+          <div class="welcome-copy">
+          <p class="eyebrow"></p>
+          <h1 id="page-title"><span class="title-dot">.</span></h1>
+          <p class="intro"></p>
+        </div>
+        <div class="info-columns">
+          <section id="patient-call-panel" class="patient-call-panel" aria-labelledby="patient-call-title" hidden>
+            <p class="eyebrow">INDKALDELSER</p>
+            <h2 id="patient-call-title">Kaldt ind</h2>
+            <p id="patient-call-status" class="patient-call-status" role="status" aria-live="polite">Henter kald…</p>
+            <div id="patient-call-list" class="patient-call-list" aria-live="polite"></div>
+          </section>
+        </div>
       </section>
     </div>
 
