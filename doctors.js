@@ -32,14 +32,12 @@ function makeDoctorRow(doctor) {
 // TV-visningen opdateres jævnligt, så dashboardændringer vises automatisk.
 const tvDoctorList = document.querySelector('#doctor-list');
 if (tvDoctorList) {
-  const count = document.querySelector('#doctor-count');
   const message = document.querySelector('#doctor-load-message');
 
   async function loadDoctors() {
     try {
       const doctors = await fetchDoctors();
       tvDoctorList.replaceChildren(...doctors.map(makeDoctorRow));
-      count.textContent = String(doctors.length);
       message.textContent = doctors.length ? '' : 'Der er endnu ikke tilføjet læger.';
     } catch (error) {
       console.error('Kunne ikke hente læger:', error.message);

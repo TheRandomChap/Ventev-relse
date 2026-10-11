@@ -27,7 +27,7 @@ function startLocalSite() {
         response.writeHead(400).end('Bad request');
         return;
       }
-      if (pathname === '/') pathname = '/doctor.html';
+      if (pathname === '/') pathname = '/app.html';
 
       const filePath = path.resolve(siteRoot, `.${pathname}`);
       if (!filePath.startsWith(siteRoot + path.sep)) {
@@ -75,7 +75,7 @@ async function createWindow() {
     return { action: 'deny' };
   });
   window.on('closed', () => localServer.close());
-  await window.loadURL(`http://127.0.0.1:${localPort}/doctor.html`);
+  await window.loadURL(`http://127.0.0.1:${localPort}/app.html`);
 }
 
 if (isSquirrelEvent) {

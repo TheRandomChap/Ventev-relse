@@ -32,7 +32,7 @@ if (loginForm) {
 
         if (error) throw error;
         const requestedPage = new URLSearchParams(window.location.search).get('next');
-        const nextPage = ['doctor.html', 'dashboard.html'].includes(requestedPage)
+        const nextPage = ['app.html', 'dashboard.html'].includes(requestedPage)
           ? requestedPage
           : 'dashboard.html';
         window.location.replace(nextPage);
@@ -69,12 +69,16 @@ if (userLabel) {
       .select('user_id')
       .eq('user_id', data.session.user.id)
       .maybeSingle();
+    userLabel.textContent = data.session.user.email;
     if (adminError || !admin) {
-      window.location.replace('doctor.html');
+      dashboardMessage.textContent = adminError
+        ? 'Kunne ikke kontrollere administratoradgangen. Kontrollér Supabase-opsætningen.'
+        : 'Denne konto mangler administratoradgang. Tilføj kontoen i clinic_admins i Supabase.';
+      dashboardMessage.classList.add('is-error');
       return;
     }
-
-    userLabel.textContent = data.session.user.email;
+    dashboardMessage.textContent = '';
+    dashboardMessage.classList.remove('is-error');
   }
 
   logoutButton.addEventListener('click', async () => {

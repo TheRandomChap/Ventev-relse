@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
   <script src="doctors.js" defer></script>
+  <script src="info-slides.js" defer></script>
   <script src="Script.js" defer></script>
 </head>
 <body>
@@ -20,6 +21,7 @@
       <p class="auth-description">Du er logget ind som <strong id="signed-in-user">—</strong>.</p>
       <a class="dashboard-link" href="tvscreen.html">Åbn venteværelsesskærmen</a>
       <button id="open-doctors-dialog" class="open-doctors-dialog" type="button">Administrer læger</button>
+      <button id="open-info-dialog" type="button">Administrer informationsskærm</button>
       <button id="logout-button" type="button">Log ud</button>
       <p class="auth-message" id="dashboard-message" role="status" aria-live="polite"></p>
     </section>
@@ -55,6 +57,36 @@
       </form>
       <p class="auth-message" id="doctor-admin-message" role="status" aria-live="polite"></p>
       <div id="dashboard-doctor-list" class="dashboard-doctor-list" aria-live="polite"></div>
+    </section>
+  </dialog>
+  <dialog id="info-dialog" class="doctor-dialog" aria-labelledby="info-admin-title">
+    <section class="doctor-admin">
+      <div class="doctor-dialog-heading">
+        <div>
+          <p class="auth-eyebrow">KONTROLPANEL</p>
+          <h2 id="info-admin-title">Informationsskærm</h2>
+        </div>
+        <button id="close-info-dialog" class="dialog-close" type="button" aria-label="Luk">×</button>
+      </div>
+      <p class="doctor-admin-intro">Upload et billede fra computeren eller indsæt en offentlig HTTPS-adresse. Vælg visningstid for hvert billede.</p>
+      <form id="info-slide-form">
+        <input id="info-slide-id" name="slideId" type="hidden">
+        <label for="info-slide-title">Overskrift (valgfri)</label>
+        <input id="info-slide-title" name="title" type="text" maxlength="120" placeholder="Fx Åbningstider">
+        <label for="info-slide-file">Upload billedfil</label>
+        <input id="info-slide-file" name="imageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+        <small class="upload-hint">PNG, JPG, WebP eller GIF · maks. 10 MB. Upload et nyt billede for at erstatte det nuværende.</small>
+        <label for="info-slide-url">Eller brug billedets HTTPS-adresse</label>
+        <input id="info-slide-url" name="imageUrl" type="url" placeholder="https://…">
+        <label for="info-slide-duration">Visningstid (sekunder)</label>
+        <input id="info-slide-duration" name="durationSeconds" type="number" min="5" max="300" value="15" required>
+        <div class="doctor-form-actions">
+          <button id="info-slide-submit" type="submit">Tilføj billede</button>
+          <button id="cancel-info-edit" class="secondary-button" type="button">Ryd formular</button>
+        </div>
+      </form>
+      <p id="info-admin-message" class="auth-message" role="status" aria-live="polite"></p>
+      <div id="info-slide-list" class="dashboard-doctor-list" aria-live="polite"></div>
     </section>
   </dialog>
 </body>
