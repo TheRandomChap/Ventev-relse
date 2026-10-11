@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Dokumentet bruger HTML5 og dansk som sidens sprog. -->
+<html lang="da">
+<head>
+  <!-- Tegnsæt og visningsindstillinger sikrer danske bogstaver og mobilvisning. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5f1">
+  <title>Læger på vagt · Venteværelse</title>
+  <!-- Style.css styrer sidens udseende. -->
+  <link rel="stylesheet" href="Style.css">
+  <!-- defer venter med JavaScript, til browseren har læst HTML-indholdet. -->
+  <script src="Script.js" defer></script>
+</head>
+<body>
+  <main class="screen">
+    <!-- Topbjælke med klinikkens logo og markering af live-oversigten. -->
+    <header class="topbar">
+      <a class="clinic-brand" href="#" aria-label="Lægehuset i Frejlev"><img class="clinic-logo" src="https://xn--lgehusetifrevejle-irbj.dk/wp-content/uploads/sites/739/2024/10/Sk%C3%A6rmbillede-2024-09-17-kl.-13.55.42-1024x335.png" alt="Lægehuset i Frejlev"></a>
+      <div class="live-indicator"><span></span> LIVE OVERSIGT</div>
+    </header>
+
+    <!-- Hovedområde med velkomst, ur og oversigten over læger. -->
+    <div class="content-grid">
+      <!-- JavaScript indsætter dato og klokkeslæt i felterne med id date og clock. -->
+      <section class="welcome" aria-labelledby="page-title">
+        <div class="welcome-copy">
+          <p class="eyebrow">VELKOMMEN</p>
+          <h1 id="page-title">Læger på vagt<span class="title-dot">.</span></h1>
+          <p class="intro">Her kan du se, hvilke læger der er til stede, og hvor du skal gå hen.</p>
+        </div>
+        <div class="date-time" aria-label="Aktuel dato og tid">
+          <span id="date">—</span>
+          <strong id="clock">—</strong>
+        </div>
+      </section>
+
+      <!-- Lægelisten: hver række viser et indbygget SVG-portræt, navn, rum og status. -->
+      <section class="doctor-section" aria-labelledby="doctors-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DAGENS BEMANDING</p>
+          <h2 id="doctors-title">Find din læge</h2>
+        </div>
+        <p class="staff-count"><span class="count-dot"></span><strong>4</strong> læger på klinikken</p>
+      </div>
+
+      <div class="doctor-list">
+        <article class="doctor-row">
+          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Anna Madsen</h3><span class="doctor-room">Rum 1</span></div><span class="status status-ready"><span></span> Klar til patienter</span>
+        </article>
+        <article class="doctor-row">
+          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Jonas Lund</h3><span class="doctor-room">Rum 2</span></div><span class="status status-busy"><span></span> I konsultation</span>
+        </article>
+        <article class="doctor-row">
+          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Sofie Kristensen</h3><span class="doctor-room">Rum 3</span></div><span class="status status-ready"><span></span> Klar til patienter</span>
+        </article>
+        <article class="doctor-row">
+          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Martin Holm</h3><span class="doctor-room">Rum 4</span></div><span class="status status-break"><span></span> Kort pause</span>
+        </article>
+      </div>
+      </section>
+    </div>
+
+    <aside class="help-banner" aria-label="Hjælp i receptionen">
+      <span class="help-icon" aria-hidden="true">i</span>
+      <p><strong>Er du i tvivl?</strong> Henvend dig i receptionen — vi hjælper dig gerne.</p>
+      <span class="banner-flower" aria-hidden="true">✳</span>
+    </aside>
+
+    <footer><span>Vi passer godt på dig.</span><span class="footer-divider"></span><span>Lægehuset I Fårevejle. <br> Høvevej 17, 4540 Fårevejle. <br> Tlf. 59 65 30 46</span></footer>
+  </main>
+</body>
+</html>
