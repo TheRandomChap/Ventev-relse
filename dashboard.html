@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5f1">
+  <title>Kontrolpanel · Lægehuset i Fårevejle</title>
+  <link rel="stylesheet" href="Style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="dashboard-title">
+      <img class="auth-logo" src="https://xn--lgehusetifrevejle-irbj.dk/wp-content/uploads/sites/739/2024/10/Sk%C3%A6rmbillede-2024-09-17-kl.-13.55.42-1024x335.png" alt="Lægehuset i Fårevejle">
+      <p class="auth-eyebrow">PERSONALEADGANG</p>
+      <h1 id="dashboard-title">Kontrolpanel</h1>
+      <p class="auth-description">Du er logget ind som <strong id="signed-in-user">—</strong>.</p>
+      <a class="dashboard-link" href="tvscreen.html">Åbn venteværelsesskærmen</a>
+      <button id="logout-button" type="button">Log ud</button>
+      <p class="auth-message" id="dashboard-message" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</body>
+</html>

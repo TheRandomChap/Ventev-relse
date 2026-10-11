@@ -1,0 +1,85 @@
+/* Grundfarverne bruges på hele TV-skærmen. */
+:root {
+  --background: #f4f5f1;
+  --surface: #fff;
+  --text: #29362f;
+  --muted: #77817b;
+  --green: #2e6953;
+  --line: #e3e7e0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: var(--text);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Siden fylder hele TV-billedet. */
+* { box-sizing: border-box; }
+body { min-width: 320px; min-height: 100vh; margin: 0; }
+a { color: inherit; text-decoration: none; }
+.screen { display: flex; width: 100%; height: 100vh; flex-direction: column; overflow: hidden; padding: 0 4vw; }
+
+/* Logo og live-markering øverst. */
+.topbar { display: flex; height: 12vh; flex: 0 0 12vh; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.clinic-logo { display: block; width: min(28vw, 320px); max-height: 9vh; object-fit: contain; object-position: left center; }
+.live-indicator { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+.live-indicator span, .count-dot { width: 9px; height: 9px; border-radius: 50%; background: #65a77a; }
+
+/* Lægerne står i venstre side, mens velkomst og ur står til højre. */
+.content-grid { display: grid; min-height: 0; flex: 1; grid-template-areas: "doctors welcome"; grid-template-columns: 75vw minmax(0, 1fr); gap: 5vw; }
+.doctor-section { display: flex; min-height: 0; flex-direction: column; grid-area: doctors; padding: 4vh 2vw 3vh 0; border-right: 1px solid var(--line); }
+.section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 2vh; }
+.eyebrow { margin: 0 0 10px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 2px; }
+h2 { margin: 0; font-size: clamp(24px, 2vw, 36px); letter-spacing: -1px; }
+.staff-count { display: flex; align-items: center; gap: 8px; margin: 0 0 3px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.staff-count strong { color: var(--text); }
+.doctor-list { display: grid; min-height: 0; flex: 1; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 1.2vh; }
+
+/* Hver lægerække viser portræt, navn, rum og status. */
+.doctor-row { display: grid; min-height: 0; grid-template-columns: 5vw minmax(0, 1fr) auto; align-items: center; gap: 1vw; padding: 1.2vh 1vw; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.doctor-details { min-width: 0; }
+.doctor-label { margin: 0 0 6px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1.2px; }
+h3 { overflow: hidden; margin: 0; font-size: clamp(17px, 1.4vw, 25px); text-overflow: ellipsis; white-space: nowrap; }
+.doctor-room { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+.status { display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.status > span { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status-ready { color: #4e8764; background: #eff6f0; }
+.status-busy { color: #a43838; background: #fae8e8; }
+.status-break { color: #78828a; background: #f0f2f3; }
+
+/* Velkomstområdet står midt på den frie del af skærmen. */
+.welcome { display: flex; flex-direction: column; grid-area: welcome; align-self: center; justify-content: center; padding: 4vh 0; }
+.welcome-copy { max-width: 700px; }
+h1 { margin: 0 0 18px; font-size: clamp(42px, 5vw, 84px); font-weight: 650; letter-spacing: -4px; line-height: 1.05; }
+.title-dot { color: #6e9c6c; }
+.intro { max-width: 580px; margin: 0; color: var(--muted); font-size: clamp(17px, 1.5vw, 24px); line-height: 1.6; }
+.date-time { display: flex; align-items: center; gap: 24px; margin-top: 4vh; color: var(--muted); font-size: 16px; text-transform: capitalize; }
+.date-time strong { color: var(--text); font-size: clamp(25px, 2.4vw, 40px); font-weight: 600; }
+
+/* Hjælp til patienterne og klinikkens kontaktoplysninger nederst. */
+.help-banner { display: flex; min-height: 7vh; align-items: center; gap: 12px; padding: 1vh 1.2vw; border: 1px solid #e1e9df; border-radius: 10px; background: #edf3eb; color: var(--muted); }
+.help-icon { display: grid; width: 24px; height: 24px; flex: 0 0 24px; place-items: center; border: 1px solid #93aa91; border-radius: 50%; color: var(--green); font-weight: 700; }
+.help-banner p { margin: 0; font-size: 13px; }
+.help-banner p strong { margin-right: 5px; color: var(--green); }
+.banner-flower { margin-left: auto; color: #cadcc5; font-size: 30px; }
+footer { display: flex; min-height: 8vh; align-items: center; justify-content: center; gap: 16px; color: #89928c; font-size: 11px; text-align: center; }
+.footer-divider { width: 4px; height: 4px; border-radius: 50%; background: #b2b9b4; }
+
+/* Login og kontrolpanel bruger også dette stylesheet. */
+.auth-page { display: grid; min-height: 100vh; place-items: center; padding: 28px; background: radial-gradient(ellipse at 50% 38%, #e8eee6, transparent 56%), var(--background); }
+.auth-card { width: min(100%, 420px); padding: 42px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: 0 20px 70px rgba(41, 54, 47, .09); }
+.auth-logo { display: block; width: min(100%, 260px); max-height: 86px; margin: 0 auto 36px; object-fit: contain; }
+.auth-eyebrow { margin: 0 0 9px; color: #61826e; font-size: 10px; font-weight: 700; letter-spacing: 1.8px; }
+.auth-card h1 { margin: 0 0 8px; font-size: 32px; letter-spacing: -1px; }
+.auth-description { margin: 0 0 28px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.auth-card label { display: block; margin: 18px 0 7px; font-size: 12px; font-weight: 650; }
+.auth-card input { width: 100%; height: 46px; padding: 0 12px; border: 1px solid #d9dfd8; border-radius: 7px; outline: none; background: var(--surface); color: var(--text); font: inherit; }
+.auth-card input:focus { border-color: #58866b; box-shadow: 0 0 0 3px rgba(88, 134, 107, .13); }
+.auth-card button { width: 100%; height: 47px; margin-top: 24px; border: 0; border-radius: 7px; background: var(--green); color: #fff; font: inherit; font-weight: 650; cursor: pointer; }
+.auth-card button:hover { background: #245640; }
+.auth-card button:disabled { cursor: wait; opacity: .7; }
+.dashboard-link { display: block; padding: 14px 12px; border: 1px solid #d9dfd8; border-radius: 7px; color: var(--green); font-size: 13px; font-weight: 650; text-align: center; }
+.dashboard-link:hover { background: #f4f7f3; }
+.auth-message { min-height: 20px; margin: 13px 0 0; color: #a23c32; font-size: 12px; line-height: 1.5; }
+.auth-footnote { margin: 21px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; text-align: center; }
