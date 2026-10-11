@@ -1,0 +1,21 @@
+{
+  "name": "laegekald",
+  "productName": "LaegeKald",
+  "version": "1.0.0",
+  "description": "Privat lægeapp til patientkald og personalealarm",
+  "author": "Venteværelsesskærm",
+  "main": "electron-main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "make": "electron-forge make && node copy-installer.cjs"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^8.0.1",
+    "@electron-forge/maker-squirrel": "^8.0.1",
+    "electron": "^44.6.0",
+    "electron-winstaller": "^5.4.4"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.4": true
+  }
+}

@@ -34,19 +34,13 @@ a { color: inherit; text-decoration: none; }
 h2 { margin: 0; font-size: clamp(24px, 2vw, 36px); letter-spacing: -1px; }
 .staff-count { display: flex; align-items: center; gap: 8px; margin: 0 0 3px; color: var(--muted); font-size: 13px; white-space: nowrap; }
 .staff-count strong { color: var(--text); }
-.doctor-list { display: grid; min-height: 0; flex: 1; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 1.2vh; }
+.doctor-list { display: grid; min-height: 0; flex: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(90px, 1fr); gap: 1.2vh; overflow: auto; }
 
-/* Hver lægerække viser portræt, navn, rum og status. */
-.doctor-row { display: grid; min-height: 0; grid-template-columns: 5vw minmax(0, 1fr) auto; align-items: center; gap: 1vw; padding: 1.2vh 1vw; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+/* Hver lægerække viser navn og lokation. */
+.doctor-row { display: flex; min-height: 0; align-items: center; padding: 1.2vh 1vw; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
 .doctor-details { min-width: 0; }
-.doctor-label { margin: 0 0 6px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1.2px; }
 h3 { overflow: hidden; margin: 0; font-size: clamp(17px, 1.4vw, 25px); text-overflow: ellipsis; white-space: nowrap; }
 .doctor-room { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
-.status { display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.status > span { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-.status-ready { color: #4e8764; background: #eff6f0; }
-.status-busy { color: #a43838; background: #fae8e8; }
-.status-break { color: #78828a; background: #f0f2f3; }
 
 /* Velkomstområdet står midt på den frie del af skærmen. */
 .welcome { display: flex; flex-direction: column; grid-area: welcome; align-self: center; justify-content: center; padding: 4vh 0; }
@@ -83,3 +77,77 @@ footer { display: flex; min-height: 8vh; align-items: center; justify-content: c
 .dashboard-link:hover { background: #f4f7f3; }
 .auth-message { min-height: 20px; margin: 13px 0 0; color: #a23c32; font-size: 12px; line-height: 1.5; }
 .auth-footnote { margin: 21px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; text-align: center; }
+.dashboard-card { width: min(100%, 760px); }
+.dashboard-card > .dashboard-link { margin-bottom: 24px; }
+.doctor-admin { padding-top: 22px; border-top: 1px solid var(--line); }
+.doctor-admin h2 { font-size: 22px; }
+.doctor-admin-intro { margin: 8px 0 18px; color: var(--muted); font-size: 13px; }
+.doctor-admin label { display: block; margin: 14px 0 6px; font-size: 12px; font-weight: 650; }
+.doctor-admin input:not([type="hidden"]) { width: 100%; height: 42px; padding: 0 11px; border: 1px solid #d9dfd8; border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; }
+.doctor-account-fields { margin: 18px 0 0; padding: 0 12px 12px; border: 1px solid var(--line); border-radius: 8px; }
+.doctor-account-fields legend { padding: 0 6px; color: var(--muted); font-size: 11px; font-weight: 700; }
+.doctor-account-fields small { display: block; margin-top: 8px; color: var(--muted); font-size: 11px; }
+.doctor-form-actions, .doctor-admin-actions { display: flex; gap: 8px; }
+.doctor-form-actions button { width: auto; flex: 1; margin-top: 14px; }
+.doctor-form-actions .secondary-button, .doctor-admin-actions .secondary-button { border: 1px solid #d9dfd8; background: var(--surface); color: var(--green); }
+.doctor-form-actions .secondary-button:hover, .doctor-admin-actions .secondary-button:hover { background: #f4f7f3; }
+.doctor-admin-actions .delete-button { color: #a23c32; }
+.dashboard-doctor-list { display: grid; gap: 8px; margin-top: 10px; }
+.doctor-admin-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+.doctor-admin-row > div:first-child { display: grid; gap: 4px; }
+.doctor-admin-row > div:first-child span, .doctor-admin-empty { color: var(--muted); font-size: 13px; }
+.doctor-admin-actions button { width: auto; height: 36px; margin: 0; padding: 0 12px; font-size: 12px; }
+.auth-message.is-error { color: #a23c32; }
+.doctor-dialog { width: min(760px, calc(100% - 32px)); max-height: 88vh; padding: 28px; overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--text); box-shadow: 0 24px 80px rgba(20, 35, 27, .25); }
+.doctor-dialog::backdrop { background: rgba(22, 34, 28, .52); backdrop-filter: blur(3px); }
+.doctor-dialog .doctor-admin { padding: 0; border: 0; }
+.doctor-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.doctor-dialog-heading h2 { font-size: 26px; }
+.doctor-dialog .dialog-close { width: 42px; height: 42px; flex: 0 0 42px; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--text); font-size: 26px; line-height: 1; cursor: pointer; }
+.doctor-dialog .dialog-close:hover { background: #f1f4f0; }
+.doctor-dialog .doctor-form-actions button { min-height: 44px; border-radius: 7px; font: inherit; font-weight: 650; cursor: pointer; }
+.doctor-dialog .doctor-form-actions button[type="submit"] { border: 0; background: var(--green); color: #fff; }
+.doctor-dialog .doctor-form-actions button[type="submit"]:hover { background: #245640; }
+.doctor-dialog .doctor-form-actions button.secondary-button { border: 1px solid #d9dfd8; background: var(--surface); color: var(--green); }
+.patient-call-panel { margin-top: 3vh; padding: 1.2vw; border: 2px solid #d69a38; border-radius: 14px; background: #fff8e8; }
+.patient-call-panel h2 { color: #70440c; font-size: clamp(19px, 1.6vw, 28px); }
+.patient-call-status { margin: 8px 0; color: #806538; font-size: 12px; }
+.patient-call-list { display: grid; max-height: 28vh; gap: 8px; overflow: auto; }
+.patient-call-card { display: grid; gap: 4px; padding: 12px; border-radius: 9px; background: #fff; box-shadow: 0 2px 8px rgba(80, 54, 16, .08); }
+.patient-call-card strong { color: #55350c; font-size: clamp(16px, 1.1vw, 21px); }
+.patient-call-card span { color: #6d6251; font-size: clamp(11px, .8vw, 15px); }
+.doctor-app-page { width: min(100%, 1260px); min-height: 100vh; margin: 0 auto; padding: 5vh 4vw; }
+.doctor-app-header { display: grid; grid-template-columns: minmax(150px, 260px) 1fr auto; align-items: center; gap: 30px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.doctor-app-header .auth-logo { width: 100%; margin: 0; }
+.doctor-app-header h1 { margin: 0 0 8px; font-size: clamp(30px, 4vw, 52px); letter-spacing: -2px; }
+.doctor-app-header .auth-description { margin: 0; }
+.doctor-app-header > button { width: auto; margin: 0; padding: 0 18px; }
+.doctor-app-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-top: 28px; }
+.doctor-app-card { padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: 0 12px 40px rgba(41, 54, 47, .06); }
+.doctor-app-card h2 { margin-bottom: 22px; font-size: 28px; }
+.doctor-app-card > p:not(.auth-eyebrow):not(.auth-message) { color: var(--muted); line-height: 1.6; }
+.doctor-app-card label { display: block; margin: 14px 0 7px; font-size: 13px; font-weight: 650; }
+.doctor-app-card input, .doctor-app-card select { width: 100%; height: 48px; padding: 0 12px; border: 1px solid #d9dfd8; border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; }
+.doctor-app-card button, .incoming-alarm button { width: 100%; min-height: 48px; margin-top: 16px; padding: 0 16px; border: 0; border-radius: 8px; background: var(--green); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.doctor-app-card button:disabled { cursor: wait; opacity: .65; }
+.app-list-heading { margin: 28px 0 10px; font-size: 17px; }
+.my-patient-calls { display: grid; gap: 8px; }
+.my-patient-calls > p { color: var(--muted); font-size: 13px; }
+.my-call-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+.my-call-row .secondary-button, .doctor-app-header .secondary-button { min-height: 38px; border: 1px solid #d9dfd8; background: var(--surface); color: var(--green); }
+.my-call-row .secondary-button { width: auto; margin: 0; padding: 0 12px; font-size: 12px; }
+.alarm-card { border-color: #edd0d0; }
+.alarm-card .alarm-button { background: #a63832; }
+.alarm-card .alarm-button:hover { background: #862a25; }
+.incoming-alarm { width: min(540px, calc(100% - 32px)); padding: 34px; border: 3px solid #b8342d; border-radius: 16px; background: #fff; color: var(--text); box-shadow: 0 0 0 12px rgba(184, 52, 45, .12), 0 24px 80px rgba(50, 20, 18, .3); text-align: center; }
+.incoming-alarm::backdrop { background: rgba(64, 18, 16, .72); }
+.incoming-alarm[open] { animation: alarm-pulse 1s ease-in-out infinite alternate; }
+.incoming-alarm h2 { margin: 8px 0 18px; color: #9f2e28; font-size: 30px; }
+.incoming-alarm > p:not(.auth-eyebrow) { font-size: 22px; font-weight: 700; }
+.incoming-alarm button { background: #a63832; }
+@keyframes alarm-pulse { to { box-shadow: 0 0 0 20px rgba(184, 52, 45, .2), 0 24px 80px rgba(50, 20, 18, .3); } }
+@media (max-width: 800px) {
+  .doctor-app-header { grid-template-columns: 1fr auto; }
+  .doctor-app-header .auth-logo { grid-column: 1 / -1; max-width: 220px; }
+  .doctor-app-grid { grid-template-columns: 1fr; }
+}

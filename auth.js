@@ -31,7 +31,11 @@ if (loginForm) {
         });
 
         if (error) throw error;
-        window.location.replace('dashboard.html');
+        const requestedPage = new URLSearchParams(window.location.search).get('next');
+        const nextPage = ['doctor.html', 'dashboard.html'].includes(requestedPage)
+          ? requestedPage
+          : 'dashboard.html';
+        window.location.replace(nextPage);
       } catch {
         // Generisk fejl fortæller ikke, om en bestemt e-mail har en konto.
         loginMessage.textContent = 'Login mislykkedes. Kontrollér e-mail og adgangskode.';
@@ -57,6 +61,16 @@ if (userLabel) {
     const { data, error } = await window.authClient.auth.getSession();
     if (error || !data.session) {
       window.location.replace('logon.html');
+      return;
+    }
+
+    const { data: admin, error: adminError } = await window.authClient
+      .from('clinic_admins')
+      .select('user_id')
+      .eq('user_id', data.session.user.id)
+      .maybeSingle();
+    if (adminError || !admin) {
+      window.location.replace('doctor.html');
       return;
     }
 

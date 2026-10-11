@@ -10,6 +10,10 @@
   <!-- Style.css styrer sidens udseende. -->
   <link rel="stylesheet" href="Style.css">
   <!-- defer venter med JavaScript, til browseren har læst HTML-indholdet. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="doctors.js" defer></script>
+  <script src="calls.js" defer></script>
   <script src="Script.js" defer></script>
 </head>
 <body>
@@ -33,32 +37,26 @@
           <span id="date">—</span>
           <strong id="clock">—</strong>
         </div>
+        <section class="patient-call-panel" aria-labelledby="patient-call-title">
+          <p class="eyebrow">INDKALDELSER</p>
+          <h2 id="patient-call-title">Kaldt ind</h2>
+          <p id="patient-call-status" class="patient-call-status" role="status" aria-live="polite">Henter kald…</p>
+          <div id="patient-call-list" class="patient-call-list" aria-live="polite"></div>
+        </section>
       </section>
 
-      <!-- Lægelisten: hver række viser et indbygget SVG-portræt, navn, rum og status. -->
+      <!-- Lægelisten hentes fra Supabase og bliver tegnet af doctors.js. -->
       <section class="doctor-section" aria-labelledby="doctors-title">
       <div class="section-heading">
         <div>
           <p class="eyebrow">DAGENS BEMANDING</p>
           <h2 id="doctors-title">Find din læge</h2>
         </div>
-        <p class="staff-count"><span class="count-dot"></span><strong>4</strong> læger på klinikken</p>
+        <p class="staff-count"><span class="count-dot"></span><strong id="doctor-count">0</strong> læger på klinikken</p>
       </div>
 
-      <div class="doctor-list">
-        <article class="doctor-row">
-          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Anna Madsen</h3><span class="doctor-room">Rum 1</span></div><span class="status status-ready"><span></span> Klar til patienter</span>
-        </article>
-        <article class="doctor-row">
-          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Jonas Lund</h3><span class="doctor-room">Rum 2</span></div><span class="status status-busy"><span></span> I konsultation</span>
-        </article>
-        <article class="doctor-row">
-          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Sofie Kristensen</h3><span class="doctor-room">Rum 3</span></div><span class="status status-ready"><span></span> Klar til patienter</span>
-        </article>
-        <article class="doctor-row">
-          <div class="doctor-details"><p class="doctor-label">PRAKTISERENDE LÆGE</p><h3>Martin Holm</h3><span class="doctor-room">Rum 4</span></div><span class="status status-break"><span></span> Kort pause</span>
-        </article>
-      </div>
+      <div class="doctor-list" id="doctor-list" aria-live="polite"></div>
+      <p class="doctor-load-message" id="doctor-load-message" role="status" aria-live="polite"></p>
       </section>
     </div>
 

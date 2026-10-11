@@ -8,18 +8,54 @@
   <link rel="stylesheet" href="Style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
+  <script src="doctors.js" defer></script>
+  <script src="Script.js" defer></script>
 </head>
 <body>
   <main class="auth-page">
-    <section class="auth-card" aria-labelledby="dashboard-title">
+    <section class="auth-card dashboard-card" aria-labelledby="dashboard-title">
       <img class="auth-logo" src="https://xn--lgehusetifrevejle-irbj.dk/wp-content/uploads/sites/739/2024/10/Sk%C3%A6rmbillede-2024-09-17-kl.-13.55.42-1024x335.png" alt="Lægehuset i Fårevejle">
       <p class="auth-eyebrow">PERSONALEADGANG</p>
       <h1 id="dashboard-title">Kontrolpanel</h1>
       <p class="auth-description">Du er logget ind som <strong id="signed-in-user">—</strong>.</p>
       <a class="dashboard-link" href="tvscreen.html">Åbn venteværelsesskærmen</a>
+      <button id="open-doctors-dialog" class="open-doctors-dialog" type="button">Administrer læger</button>
       <button id="logout-button" type="button">Log ud</button>
       <p class="auth-message" id="dashboard-message" role="status" aria-live="polite"></p>
     </section>
   </main>
+  <dialog id="doctor-dialog" class="doctor-dialog" aria-labelledby="doctor-admin-title">
+    <section class="doctor-admin">
+      <div class="doctor-dialog-heading">
+        <div>
+          <p class="auth-eyebrow">KONTROLPANEL</p>
+          <h2 id="doctor-admin-title">Administrer læger</h2>
+        </div>
+        <button id="close-doctors-dialog" class="dialog-close" type="button" aria-label="Luk">×</button>
+      </div>
+      <p class="doctor-admin-intro">Tilføj læger, eller rediger deres navn og lokation.</p>
+      <form id="doctor-form">
+        <input id="doctor-id" name="doctorId" type="hidden">
+        <label for="doctor-name">Navn</label>
+        <input id="doctor-name" name="name" type="text" maxlength="100" required>
+        <label for="doctor-location">Lokation</label>
+        <input id="doctor-location" name="location" type="text" maxlength="100" placeholder="Fx Rum 1" required>
+        <fieldset id="doctor-account-fields" class="doctor-account-fields">
+          <legend>Login til lægen</legend>
+          <label for="doctor-email">Brugernavn (e-mail)</label>
+          <input id="doctor-email" name="email" type="email" autocomplete="off" required>
+          <label for="doctor-password">Startadgangskode</label>
+          <input id="doctor-password" name="password" type="password" autocomplete="new-password" minlength="12" required>
+          <small>Bed lægen ændre adgangskoden efter første login.</small>
+        </fieldset>
+        <div class="doctor-form-actions">
+          <button type="submit">Tilføj læge</button>
+          <button id="cancel-doctor-edit" class="secondary-button" type="button">Annuller</button>
+        </div>
+      </form>
+      <p class="auth-message" id="doctor-admin-message" role="status" aria-live="polite"></p>
+      <div id="dashboard-doctor-list" class="dashboard-doctor-list" aria-live="polite"></div>
+    </section>
+  </dialog>
 </body>
 </html>

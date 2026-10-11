@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5f1">
+  <title>Lægekald · Venteværelse</title>
+  <link rel="stylesheet" href="Style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="calls.js" defer></script>
+</head>
+<body>
+  <main class="doctor-app-page">
+    <header class="doctor-app-header">
+      <img class="auth-logo" src="https://xn--lgehusetifrevejle-irbj.dk/wp-content/uploads/sites/739/2024/10/Sk%C3%A6rmbillede-2024-09-17-kl.-13.55.42-1024x335.png" alt="Lægehuset i Fårevejle">
+      <div>
+        <p class="auth-eyebrow">LÆGEINDGANG</p>
+        <h1>Velkommen, <span id="doctor-name">…</span></h1>
+        <p class="auth-description">Dit rum: <strong id="doctor-location">…</strong></p>
+      </div>
+      <button id="doctor-logout" class="secondary-button" type="button">Log ud</button>
+    </header>
+
+    <div class="doctor-app-grid">
+      <section class="doctor-app-card" aria-labelledby="call-title">
+        <p class="auth-eyebrow">PATIENTKALD</p>
+        <h2 id="call-title">Kald en patient ind</h2>
+        <form id="patient-call-form">
+          <label for="patient-name">Patientens navn</label>
+          <input id="patient-name" name="patientName" type="text" maxlength="100" autocomplete="off" required>
+          <button id="call-patient-button" type="submit">Kald ind til mit rum</button>
+        </form>
+        <p id="call-message" class="auth-message" role="status" aria-live="polite"></p>
+        <h3 class="app-list-heading">Mine aktive kald</h3>
+        <div id="my-patient-calls" class="my-patient-calls" aria-live="polite"></div>
+      </section>
+
+      <section class="doctor-app-card alarm-card" aria-labelledby="alarm-title">
+        <p class="auth-eyebrow">BESKED TIL PERSONALET</p>
+        <h2 id="alarm-title">Alarmér alle læger</h2>
+        <p>Alle lægecomputere får en tydelig alarm. Beskeden vises ikke på venteværelsesskærmen.</p>
+        <label for="alarm-location">Alle læger skal gå til</label>
+        <select id="alarm-location" required></select>
+        <button id="send-doctor-alarm" class="alarm-button" type="button">Send alarm til alle læger</button>
+        <p id="alarm-message" class="auth-message" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+    <p id="doctor-page-message" class="auth-message" role="status" aria-live="polite"></p>
+  </main>
+
+  <dialog id="incoming-alarm" class="incoming-alarm" aria-labelledby="incoming-alarm-title">
+    <p class="auth-eyebrow">PERSONALEALARM</p>
+    <h2 id="incoming-alarm-title">Gå til det angivne rum</h2>
+    <p id="incoming-alarm-location"></p>
+    <button id="acknowledge-alarm" type="button">Jeg har set alarmen</button>
+  </dialog>
+</body>
+</html>
